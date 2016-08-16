@@ -18,8 +18,7 @@ protocol Request {
     var method: HTTPMethod { get }
     var parameter: [String: AnyObject] { get }
     
-    associatedtype Response
-    func parse(data: Data) -> Response?
+    associatedtype Response: Decodable
 }
 
 extension Request {
@@ -39,6 +38,16 @@ extension RequestSender {
     }
 }
 
+protocol Decodable {
+    static func parse(data: Data) -> Self?
+}
+
+extension User: Decodable {
+    static func parse(data: Data) -> User? {
+        return User(data: data)
+    }
+}
+
 struct URLSessionRequestSender: RequestSender {
     func send<T: Request>(_ r: T, handler: (T.Response?) -> Void) {
         let url = URL(string: host.appending(r.path))!
@@ -48,7 +57,7 @@ struct URLSessionRequestSender: RequestSender {
         
         let task = URLSession.shared.dataTask(with: request) {
             data, res, error in
-            if let data = data, let res = r.parse(data: data) {
+            if let data = data, let res = T.Response.parse(data: data) {
                 DispatchQueue.main.async {
                     handler(res)
                 }

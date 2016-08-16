@@ -51,7 +51,7 @@ struct TestRequestSender: RequestSender {
             guard let data = try? Data(contentsOf: fileURL) else {
                 fatalError()
             }
-            handler(r.parse(data: data))
+            handler(T.Response.parse(data: data))
         default:
             fatalError("Unknown path")
         }
