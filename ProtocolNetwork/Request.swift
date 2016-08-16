@@ -79,7 +79,4 @@ struct UserRequest: Request {
     let method: HTTPMethod = .GET
     
     typealias Response = User
-    func parse(data: Data) -> User? {
-        return User(data: data)
-    }
 }
