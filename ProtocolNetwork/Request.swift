@@ -14,7 +14,6 @@ enum HTTPMethod: String {
 }
 
 protocol Request {
-    var host: String { get }
     var path: String { get }
     var method: HTTPMethod { get }
     var parameter: [String: AnyObject] { get }
@@ -24,17 +23,25 @@ protocol Request {
 }
 
 extension Request {
-    var host: String {
-        return "http://api.onevcat.com"
-    }
     var parameter: [String: AnyObject] {
         return [:]
     }
 }
 
-struct RequestSender {
+protocol RequestSender {
+    var host: String { get }
+    func send<T: Request>(_ r: T, handler: (T.Response?) -> Void)
+}
+
+extension RequestSender {
+    var host: String {
+        return "http://api.onevcat.com"
+    }
+}
+
+struct URLSessionRequestSender: RequestSender {
     func send<T: Request>(_ r: T, handler: (T.Response?) -> Void) {
-        let url = URL(string: r.host.appending(r.path))!
+        let url = URL(string: host.appending(r.path))!
         var request = URLRequest(url: url)
         request.httpMethod = r.method.rawValue
         // request.httpBody = ???

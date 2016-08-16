@@ -20,7 +20,7 @@ class ViewController: UIViewController {
         nameLabel.text = ""
         messageLabel.text = ""
         
-        RequestSender().send(UserRequest(name: "onevcat")) { user in
+        URLSessionRequestSender().send(UserRequest(name: "onevcat")) { user in
             self.nameLabel.text = user?.name ?? ""
             self.messageLabel.text = user?.message ?? ""
         }
