@@ -20,7 +20,7 @@ class ViewController: UIViewController {
         nameLabel.text = ""
         messageLabel.text = ""
         
-        UserRequest(name: "onevcat").send { user in
+        RequestSender().send(UserRequest(name: "onevcat")) { user in
             self.nameLabel.text = user?.name ?? ""
             self.messageLabel.text = user?.message ?? ""
         }

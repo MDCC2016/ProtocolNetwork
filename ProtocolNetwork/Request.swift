@@ -30,15 +30,18 @@ extension Request {
     var parameter: [String: AnyObject] {
         return [:]
     }
-    func send(handler: (Response?) -> Void ) {
-        let url = URL(string: host.appending(path))!
+}
+
+struct RequestSender {
+    func send<T: Request>(_ r: T, handler: (T.Response?) -> Void) {
+        let url = URL(string: r.host.appending(r.path))!
         var request = URLRequest(url: url)
-        request.httpMethod = method.rawValue
+        request.httpMethod = r.method.rawValue
         // request.httpBody = ???
         
         let task = URLSession.shared.dataTask(with: request) {
             data, res, error in
-            if let data = data, let res = self.parse(data: data) {
+            if let data = data, let res = r.parse(data: data) {
                 DispatchQueue.main.async {
                     handler(res)
                 }
