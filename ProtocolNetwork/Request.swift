@@ -20,7 +20,7 @@ protocol Request {
     var parameter: [String: AnyObject] { get }
     
     associatedtype Response
-    func parse(data: Data) -> Response
+    func parse(data: Data) -> Response?
 }
 
 extension Request {
@@ -36,14 +36,31 @@ extension Request {
         request.httpMethod = method.rawValue
         // request.httpBody = ???
         
-        URLSession.shared.dataTask(with: request) {
+        let task = URLSession.shared.dataTask(with: request) {
             data, res, error in
-            if let data = data {
-                let res = self.parse(data: data)
-                handler(res)
+            if let data = data, let res = self.parse(data: data) {
+                DispatchQueue.main.async {
+                    handler(res)
+                }
             } else {
-                handler(nil)
+                DispatchQueue.main.async {
+                    handler(nil)
+                }
             }
         }
+        task.resume()
+    }
+}
+
+struct UserRequest: Request {
+    let name: String
+    var path: String {
+        return "/users/\(name)"
+    }
+    let method: HTTPMethod = .GET
+    
+    typealias Response = User
+    func parse(data: Data) -> User? {
+        return User(data: data)
     }
 }

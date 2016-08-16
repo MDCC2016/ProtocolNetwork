@@ -10,9 +10,20 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var messageLabel: UILabel!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        nameLabel.text = ""
+        messageLabel.text = ""
+        
+        UserRequest(name: "onevcat").send { user in
+            self.nameLabel.text = user?.name ?? ""
+            self.messageLabel.text = user?.message ?? ""
+        }
     }
 
     override func didReceiveMemoryWarning() {
