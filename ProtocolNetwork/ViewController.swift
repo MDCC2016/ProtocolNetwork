@@ -20,10 +20,6 @@ class ViewController: UIViewController {
         nameLabel.text = ""
         messageLabel.text = ""
         
-        URLSessionRequestSender().send(UserRequest(name: "onevcat")) { user in
-            self.nameLabel.text = user?.name ?? ""
-            self.messageLabel.text = user?.message ?? ""
-        }
     }
 
     override func didReceiveMemoryWarning() {
