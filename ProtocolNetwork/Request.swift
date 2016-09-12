@@ -33,7 +33,7 @@ extension Request {
 }
 
 struct RequestSender {
-    func send<T: Request>(_ r: T, handler: (T.Response?) -> Void) {
+    func send<T: Request>(_ r: T, handler: @escaping (T.Response?) -> Void) {
         let url = URL(string: r.host.appending(r.path))!
         var request = URLRequest(url: url)
         request.httpMethod = r.method.rawValue
