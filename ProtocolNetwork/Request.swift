@@ -30,7 +30,7 @@ extension Request {
     var parameter: [String: AnyObject] {
         return [:]
     }
-    func send(handler: (Response?) -> Void ) {
+    func send(handler: @escaping (Response?) -> Void ) {
         let url = URL(string: host.appending(path))!
         var request = URLRequest(url: url)
         request.httpMethod = method.rawValue
