@@ -42,7 +42,7 @@ class ProtocolNetworkTests: XCTestCase {
 
 
 struct TestRequestSender: RequestSender {
-    func send<T : Request>(_ r: T, handler: (T.Response?) -> Void) {
+    func send<T : Request>(_ r: T, handler: @escaping (T.Response?) -> Void) {
         switch r.path {
         case "/users/onevcat":
             guard let fileURL = Bundle(for: ProtocolNetworkTests.self).url(forResource: "users:onevcat", withExtension: "") else {
